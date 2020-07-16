@@ -1,0 +1,7 @@
+[
+  {
+    "name": "jenkins_jnlp_slave",
+    "image": "jenkins/jnlp-slave",
+    "essential": true
+  }
+]

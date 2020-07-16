@@ -1,0 +1,23 @@
+[
+  {
+    "name": "jenkins_jnlp_slave",
+    "image": "cloudbees/jnlp-slave-with-java-build-tools:2.5.1",
+    "essential": true,
+    "memoryReservation": 512,
+    "mountPoints": [
+      {
+        "containerPath": "/var/run/docker.sock",
+        "sourceVolume": "docker_sock"
+      },
+      {
+        "containerPath": "/usr/bin/docker",
+        "sourceVolume": "docker_bin"
+      },
+      {
+        "containerPath": "/usr/local/bin/docker-compose",
+        "sourceVolume": "docker_compose_bin"
+      }
+    ],
+    "privileged": true
+  }
+]

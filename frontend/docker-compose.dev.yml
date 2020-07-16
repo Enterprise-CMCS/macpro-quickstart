@@ -1,0 +1,39 @@
+version: "3.4"
+services:
+  ui:
+    container_name: react
+    build:
+      context: ./react
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "80:3000"
+    networks:
+      - data_net
+    environment:
+      - API_URL=http://localhost:8000 # This is how a browser would call the api
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    volumes:
+      - ./react:/app
+  api:
+    container_name: django
+    build:
+      context: ./django
+      dockerfile: Dockerfile.dev
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    networks:
+      - data_net
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=postgres # The api can address the db by its service name over the docker bridge network
+      - DATABASE=postgres
+    volumes:
+      - ./django/:/usr/src/app/
+networks:
+  data_net:
+    external: true

@@ -1,0 +1,26 @@
+# Make a copy of this file, call it terraform.tfvars, and fill it out accordingly.
+
+# Any name that makes sense; used to prefix and/or suffix a lot of AWS resources built by terraform.
+name = "advanced"
+
+# VPC to create
+vpc_cidr = "10.151.0.0/16"
+
+# Configuration for the Jenkins ECS Host
+host_instance_type = "t3a.small"
+
+# Set FQDN and DNS related variables
+jenkins_fqdn                 = "jenkins-advanced.examples.cl-demo.com"
+jenkins_fqdn_certificate_arn = "arn:aws:acm:us-east-1:012345678910:certificate/e7033vd6-7bq9-1xx2-12xx-12xxxxx12xx12d123"
+jenkins_hosted_zone          = "cl-demo.com"
+
+# This example builds a docker image and pushes to ECR.  This name only needs to be unique within your AWS account, not globally unique.
+jenkins_ecr_repo_name = "jenkins-advanced"
+
+# Google OAuth is configured in the Docker image using Jenkins CasC.
+# These are Google OAuth Credentials for an application configured to redirect to the jenkins FQDN.
+# https://www.balbooa.com/gridbox-documentation/how-to-get-google-client-id-and-client-secret is pretty good
+# Tip:  your redirect url must be https://<your jenkins_fqdn>/securityRealm/finishLogin  This bounces the user back to Jenkins after login
+jenkins_google_oauth_client_id     = "90275931742306-hn4plf6lhuchw8v9f23nfvisahud1fndv.apps.googleusercontent.com"
+jenkins_google_oauth_client_secret = "472VYAMV9jiva2jia989M2"
+jenkins_google_oauth_domain        = "collabralink.com"

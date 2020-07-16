@@ -1,0 +1,202 @@
+pipeline {
+  agent { label "ec2-jnlp-slave" }
+  options {
+    disableConcurrentBuilds()
+    quietPeriod(0)
+    ansiColor('xterm')
+  }
+  parameters {
+    booleanParam(defaultValue: false, name: 'DESTROY_AT_THE_START', description: 'Destroy the current environment at the start of the build')
+    booleanParam(defaultValue: true, name: 'DEPLOY', description: 'Deploy the application to Amazon')
+    booleanParam(defaultValue: true, name: 'RUN_TESTS', description: 'Run tests against the application')
+    booleanParam(defaultValue: false, name: 'DESTROY_AT_THE_END', description: 'Destroy the environment at the end.')
+  }
+  environment {
+    BUILD_TAG = resolveBuildTag()
+    VPC_NAME = "dev"
+  }
+  stages {
+    stage("Prep Agent") {
+      steps {
+        script {
+          currentBuild.displayName = env.BUILD_TAG
+
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+
+          jenkinsUtils.installAwsCli()
+          jenkinsUtils.installTerraform("0.12.24")
+
+          env.ECR_REPOSITORY_URI_UI = jenkinsUtils.getEcrRepoUri("react")
+          env.ECR_REPOSITORY_URI_API = jenkinsUtils.getEcrRepoUri("django")
+          env.ECR_REPOSITORY_URI_POSTGRES_DEPLOYER = jenkinsUtils.getEcrRepoUri("postgres_deployer")
+
+          if( env.BUILD_NUMBER == "1" ) {
+            env.DEPLOY = true
+            env.RUN_TESTS = true
+          }
+        }
+      }
+    }
+    stage("Destroy at the start") {
+      when {
+        expression { env.DESTROY_AT_THE_START == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          dir('frontend/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+          dir('data/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+        }
+      }
+    }
+    stage("Build/Push Images") {
+      when {
+        expression { env.DEPLOY == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          lock('docker_socket') {
+            jenkinsUtils.buildAndPushImageToEcr("data/postgres_deployer", env.ECR_REPOSITORY_URI_POSTGRES_DEPLOYER, [env.BUILD_TAG, env.BRANCH_NAME])
+            jenkinsUtils.buildAndPushImageToEcr("frontend/django", env.ECR_REPOSITORY_URI_API, [env.BUILD_TAG, env.BRANCH_NAME])
+            jenkinsUtils.buildAndPushImageToEcr("frontend/react", env.ECR_REPOSITORY_URI_UI, [env.BUILD_TAG, env.BRANCH_NAME])
+          }
+        }
+      }
+    }
+    stage("Scan Images") {
+      when {
+        expression { env.DEPLOY == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          jenkinsUtils.fetchEcrScanResult("postgres_deployer", env.BUILD_TAG)
+          jenkinsUtils.fetchEcrScanResult("django", env.BUILD_TAG)
+          jenkinsUtils.fetchEcrScanResult("react", env.BUILD_TAG)
+        }
+      }
+      post {
+        always {
+          script {
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'ecr_scan_*.json'
+          }
+        }
+      }
+    }
+    stage("Deploy Data Layer") {
+      when {
+        expression { env.DEPLOY == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          dir('data/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+        }
+      }
+      post {
+        always {
+          script {
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'data/aws/log*'
+          }
+        }
+      }
+    }
+    stage("Deploy Frontend Layer") {
+      when {
+        expression { env.DEPLOY == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          dir('frontend/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+        }
+      }
+      post {
+        always {
+          script {
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'frontend/aws/log*'
+          }
+        }
+      }
+    }
+    stage("Test") {
+      when {
+        expression { env.RUN_TESTS == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          dir('frontend/aws') {
+            env.APPLICATION_ENDPOINT = jenkinsUtils.terraformOutput(env.APPLICATION_BUCKET, env.BRANCH_NAME, "application_endpoint")
+          }
+          dir('tests/testcafe') {
+            sh '''
+              set -e
+              docker build . -t loaded_testcafe:${BRANCH_NAME} --build-arg application_endpoint=$APPLICATION_ENDPOINT
+              docker run --rm --name ${BRANCH_NAME} -e APPLICATION_ENDPOINT=$APPLICATION_ENDPOINT loaded_testcafe:${BRANCH_NAME} chromium /tests/**/*.js
+            '''
+          }
+        }
+      }
+    }
+    stage("Destroy at the end") {
+      when {
+        expression { env.DESTROY_AT_THE_END == "true"}
+      }
+      steps {
+        script {
+          def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
+          dir('frontend/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+          dir('data/aws') {
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+              [
+                "application_version": env.BUILD_TAG,
+                "vpc_name": env.VPC_NAME
+              ]
+            )
+          }
+        }
+      }
+    }
+  }
+}
+
+def resolveBuildTag() {
+  return "${BRANCH_NAME}.${GIT_COMMIT}"
+}

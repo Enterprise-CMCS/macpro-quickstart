@@ -1,0 +1,7 @@
+[
+  {
+    "name": "jenkins_jnlp_slave",
+    "image": "cloudbees/jnlp-slave-with-java-build-tools:2.5.1",
+    "essential": true
+  }
+]

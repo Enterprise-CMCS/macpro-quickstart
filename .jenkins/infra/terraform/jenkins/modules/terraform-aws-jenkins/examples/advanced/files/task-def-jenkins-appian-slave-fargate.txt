@@ -1,0 +1,38 @@
+[
+  {
+    "name": "jenkins_jnlp_slave",
+    "image": "jenkins/jnlp-slave",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8980
+      }
+    ]
+  },
+  {
+    "name": "firefox",
+    "image": "selenium/standalone-firefox",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 4444
+      }
+    ]
+  },
+  {
+    "name": "chrome",
+    "image": "selenium/standalone-chrome",
+    "essential": true,
+    "environment": [
+      {
+        "name": "SE_OPTS",
+        "value": "-port 4445"
+      }
+    ],
+    "portMappings": [
+      {
+        "containerPort": 4445
+      }
+    ]
+  }
+]

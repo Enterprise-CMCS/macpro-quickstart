@@ -129,7 +129,7 @@ resource "aws_alb" "api" {
 }
 
 resource "aws_alb_target_group" "api" {
-  name                 = "api-target-group-${terraform.workspace}"
+  # The name parameter for this resource has a length limit and is not required.  We won't specify a name.
   port                 = 8000
   target_type          = "ip"
   protocol             = "HTTP"

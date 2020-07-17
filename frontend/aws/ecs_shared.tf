@@ -6,7 +6,7 @@ locals {
 # Create some base IAM objects for ECS tasks and services, often shared
 ####################################################################################################
 resource "aws_iam_role" "ecs_task" {
-  name               = "ecs-task-role-frontend-${terraform.workspace}"
+  # The name parameter for this resource has a length limit and is not required.  We won't specify a name.
   assume_role_policy = file("files/assume-role-policy-ecs-tasks.json")
 }
 

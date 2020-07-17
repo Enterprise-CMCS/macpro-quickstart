@@ -90,7 +90,7 @@ resource "aws_security_group" "alb_ui" {
 }
 
 resource "aws_alb" "ui" {
-  name            = "ui-alb-${terraform.workspace}"
+  # The name parameter for this resource has a length limit and is not required.  We won't specify a name.
   internal        = false
   security_groups = [aws_security_group.alb_ui.id]
   subnets         = data.aws_subnet_ids.public.ids

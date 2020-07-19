@@ -41,7 +41,7 @@ void installAwsCli() {
 void installTerraform(String version) {
   sh """
     curl -O https://releases.hashicorp.com/terraform/${version}/terraform_${version}_linux_amd64.zip
-    unzip ./terraform_${version}_linux_amd64.zip -d ~/.local/bin/ && rm ./terraform_${version}_linux_amd64.zip
+    unzip -o ./terraform_${version}_linux_amd64.zip -d ~/.local/bin/ && rm ./terraform_${version}_linux_amd64.zip
   """
 }
 

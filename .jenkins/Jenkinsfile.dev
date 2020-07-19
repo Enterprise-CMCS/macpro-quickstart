@@ -45,7 +45,7 @@ pipeline {
         script {
           def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
           dir('frontend/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -53,7 +53,7 @@ pipeline {
             )
           }
           dir('data/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -176,7 +176,7 @@ pipeline {
         script {
           def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
           dir('frontend/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -184,7 +184,7 @@ pipeline {
             )
           }
           dir('data/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME

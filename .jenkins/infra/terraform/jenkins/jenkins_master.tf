@@ -37,10 +37,22 @@ module "path_hash" {
   path   = "./jenkins_image"
 }
 
+# Generate a random password for the initial admin
+resource "random_password" "admin_password" {
+  length           = 12
+  min_upper = 1
+  min_lower = 1
+  min_numeric = 1
+  min_special = 1
+  override_special = "*%"
+}
+
 resource "local_file" "jenkins_yml" {
   content = templatefile(
     "${path.module}/jenkins_image/files/casc_configs/jenkins.yml.tpl", {
       jenkins_url         = "${module.jenkins.jenkins_url}/",
+      admin_username = var.jenkins_admin_username,
+      admin_password = random_password.admin_password.result,
       slave_cluster_arn   = aws_ecs_cluster.slave_cluster.arn,
       region              = data.aws_region.current.name,
       task_subnets        = module.vpc_management.private_subnets,

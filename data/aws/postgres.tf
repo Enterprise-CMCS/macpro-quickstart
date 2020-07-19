@@ -33,7 +33,7 @@ resource "aws_security_group" "db" {
 resource "random_password" "postgres" {
   length           = 10
   special          = true
-  override_special = "@"
+  override_special = "*"
 }
 
 resource "aws_route53_zone" "database" {

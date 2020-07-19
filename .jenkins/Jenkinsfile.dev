@@ -26,10 +26,6 @@ pipeline {
           jenkinsUtils.installAwsCli()
           jenkinsUtils.installTerraform("0.12.24")
 
-          env.ECR_REPOSITORY_URI_UI = jenkinsUtils.getEcrRepoUri("react")
-          env.ECR_REPOSITORY_URI_API = jenkinsUtils.getEcrRepoUri("django")
-          env.ECR_REPOSITORY_URI_POSTGRES_DEPLOYER = jenkinsUtils.getEcrRepoUri("postgres_deployer")
-
           if( env.BUILD_NUMBER == "1" ) {
             env.DEPLOY = true
             env.RUN_TESTS = true
@@ -45,7 +41,7 @@ pipeline {
         script {
           def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
           dir('frontend/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -53,7 +49,7 @@ pipeline {
             )
           }
           dir('data/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -71,9 +67,9 @@ pipeline {
         script {
           def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
           lock('docker_socket') {
-            jenkinsUtils.buildAndPushImageToEcr("data/postgres_deployer", env.ECR_REPOSITORY_URI_POSTGRES_DEPLOYER, [env.BUILD_TAG, env.BRANCH_NAME])
-            jenkinsUtils.buildAndPushImageToEcr("frontend/django", env.ECR_REPOSITORY_URI_API, [env.BUILD_TAG, env.BRANCH_NAME])
-            jenkinsUtils.buildAndPushImageToEcr("frontend/react", env.ECR_REPOSITORY_URI_UI, [env.BUILD_TAG, env.BRANCH_NAME])
+            jenkinsUtils.buildAndPushImageToEcr("data/postgres_deployer", "postgres_deployer", [env.BUILD_TAG, env.BRANCH_NAME])
+            jenkinsUtils.buildAndPushImageToEcr("frontend/django", "django", [env.BUILD_TAG, env.BRANCH_NAME])
+            jenkinsUtils.buildAndPushImageToEcr("frontend/react", "react", [env.BUILD_TAG, env.BRANCH_NAME])
           }
         }
       }
@@ -176,7 +172,7 @@ pipeline {
         script {
           def jenkinsUtils = load ".jenkins/groovy/JenkinsUtils.groovy"
           dir('frontend/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME
@@ -184,7 +180,7 @@ pipeline {
             )
           }
           dir('data/aws') {
-            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "apply",
+            jenkinsUtils.terraformApply(env.APPLICATION_BUCKET, env.BRANCH_NAME, "destroy",
               [
                 "application_version": env.BUILD_TAG,
                 "vpc_name": env.VPC_NAME

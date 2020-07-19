@@ -13,6 +13,11 @@ variable "jenkins_ecr_repo_name" {
   default     = "jenkins-acme"
 }
 
+variable "jenkins_admin_username" {
+  description = "The username for the intial Jenkins admin that will be created"
+  default = "initialAdmin"
+}
+
 variable "git_https_clone_url" {}
 variable "git_username_for_jenkins" {}
 variable "git_access_token_for_jenkins" {}

@@ -1,7 +1,8 @@
 #!/usr/bin/env groovy
 
-void buildAndPushImageToEcr(String buildDir, String imageUri, List tags) {
+void buildAndPushImageToEcr(String buildDir, String repositoryName, List tags) {
   loginToEcr()
+  imageUri = getEcrRepoUri(repositoryName)
   tagString = ""
   tags.each {
     tagString += "-t $imageUri:$it "

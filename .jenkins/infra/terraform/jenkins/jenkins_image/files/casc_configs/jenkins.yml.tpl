@@ -4,6 +4,9 @@ jenkins:
   securityRealm:
     local:
       allowsSignup: false
+      users:
+        - id: "${admin_username}"
+          password: "${admin_password}"
   authorizationStrategy:
     globalMatrix:
       permissions:

@@ -33,8 +33,7 @@ Standing up Jenkins to build, deploy, and test your app in Amazon.
 - Read the instructions at the top of the file and throughout, and act accordingly.  It should instruct you to create a copy of set.env.sh.tpl and update values.
 - cd .jenkins/infra
 - sh deploy.sh
-- A lot of stuff will kick off.  At the end, a URL will be printend.  Click or copy/paste the url in a browser
-- Create the inital Jenkins admin user, and you're in.  After logging in, you'll be navigated to a user sub page in Jenkins.  Navigate to the home page; you can click 'Jenkins' in the top left, or punch in the URL again.  
+- A lot of stuff will kick off.  At the end, a URL will be printed, along with a username and password.  Navigate to the URL, punch in the user/password, and you should be landed on the Jenkins homepage.browser  
 - Once on the home page, you should see the jobs created as part of the bootstrapping process.  The master/preprod/prod jobs you see will begin momentarily.  The dev multibranch pipeline is to deploy dev-* branches when pushed.
 - All Jenkins configuration is driven by the [Jenkins Configuration as Code plugin](https://github.com/jenkinsci/configuration-as-code-plugin).  If you're curious about our implementation, you can find our CasC template (pretty buried ) in .jeknins [here](.jenkins/infra/terraform/jenkins/jenkins_image/files/casc/jenkins.yml.tpl)
 - Configure Jenkins as you wish.  Jenkins is deployed to ECS with data persistence provided by EBS and [rexray](https://github.com/rexray/rexray).

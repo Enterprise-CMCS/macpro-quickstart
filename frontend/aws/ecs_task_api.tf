@@ -61,6 +61,15 @@ resource "aws_security_group_rule" "api_egress" {
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = data.aws_ssm_parameter.postgres_security_group.value
+  security_group_id        = aws_security_group.api.id
+}
+
+resource "aws_security_group_rule" "postgres_ingress_from_api" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.api.id
   security_group_id        = data.aws_ssm_parameter.postgres_security_group.value
 }
 

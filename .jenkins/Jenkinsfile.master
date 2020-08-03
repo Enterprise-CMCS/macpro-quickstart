@@ -114,7 +114,7 @@ pipeline {
           dir('tests') {
             sh '''
               set -e
-              docker run --rm --name ${JOB_NAME} -e APPLICATION_ENDPOINT=$APPLICATION_ENDPOINT -v $(pwd)/testcafe:/tests testcafe/testcafe chromium /tests/**/*.js
+              docker run --rm -e APPLICATION_ENDPOINT=$APPLICATION_ENDPOINT -v $(pwd)/testcafe:/tests testcafe/testcafe chromium /tests/**/*.js
             '''
           }
         }

@@ -13,12 +13,13 @@ pipeline {
     stage("Scratch") {
       steps {
         script {
-          dir('tests/testcafe')
-          sh '''
-            #docker run -v $(pwd):/tests -e APPLICATION_ENDPOINT=https://google.com testcafe/testcafe chromium /tests/**/*.js
-            docker run -v $(pwd):/asdf centos ls -la /asdf
-            break break
-          '''
+          dir('tests/testcafe') {
+            sh '''
+              #docker run -v $(pwd):/tests -e APPLICATION_ENDPOINT=https://google.com testcafe/testcafe chromium /tests/**/*.js
+              docker run -v $(pwd):/asdf centos ls -la /asdf
+              break break
+            '''
+          }
         }
       }
     }

@@ -19,6 +19,9 @@ chown 1000:$dockergid /var/run/docker.sock
 curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
+# For DinDinD purposes (sort of)
+mkdir -p /home/jenkins/workspace
+chmod 777 /home/jenkins/workspace
 
 # Let the ECS agent know to which cluster this host belongs.
 echo ECS_CLUSTER='${ecs_cluster_name}' >> /etc/ecs/ecs.config

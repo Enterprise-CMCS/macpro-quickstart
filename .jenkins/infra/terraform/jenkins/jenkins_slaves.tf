@@ -182,6 +182,10 @@ resource "aws_ecs_task_definition" "ec2_jnlp_slave" {
     name      = "docker_compose_bin"
     host_path = "/usr/local/bin/docker-compose"
   }
+  volume {
+    name      = "home_jenkins_workspace"
+    host_path = "/home/jenkins/workspace"
+  }
 }
 
 # ECS EC2 JNLP Slave - Allow Jenkins Master permission to launch task(s)

@@ -16,6 +16,10 @@
       {
         "containerPath": "/usr/local/bin/docker-compose",
         "sourceVolume": "docker_compose_bin"
+      },
+      {
+        "containerPath": "/home/jenkins/workspace",
+        "sourceVolume": "home_jenkins_workspace"
       }
     ],
     "privileged": true

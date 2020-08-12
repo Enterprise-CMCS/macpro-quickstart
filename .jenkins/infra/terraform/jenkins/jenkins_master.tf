@@ -4,7 +4,7 @@
 #########################################
 
 module "jenkins" {
-  source                         = "git::https://github.com/cmsgov/terraform-aws-jenkins.git?ref=2.2.4"
+  source                         = "git::https://github.com/cmsgov/terraform-aws-jenkins.git?ref=2.2.5"
   name                           = var.name
   vpc_id                         = module.vpc_management.vpc_id
   host_instance_type             = var.host_instance_type

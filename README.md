@@ -51,10 +51,8 @@ Mac/Linux - Since all workflows are simple shells launching docker containers, i
 AWS Account (optional):  You'll need an AWS account with an admin IAM user if you want to build Jenkins in AWS and deploy your application to the cloud.
 
 ## Dependencies
-Your github user must have permissions to read https://github.com/collabralink-technology/terraform-aws-jenkins
+Your github user must have permissions to read https://github.com/collabralink-technology/terraform-aws-jenkins  
 This is important, as the module is currently private.
-
-None.
 
 ## Examples
 None.

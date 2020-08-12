@@ -52,15 +52,14 @@ AWS Account (optional):  You'll need an AWS account with an admin IAM user if yo
 
 ## Dependencies
 
-Your github user must have permissions to read https://github.com/collabralink-technology/terraform-aws-jenkins  
-This is important, as the module is currently private.
+None.
 
 ## Examples
 None.
 
 ## Contributing / To-Do
 
-See current open [issues](https://github.com/collabralink-technology/quickstart-tech-challenge/issues) or check out the [project board](https://github.com/collabralink-technology/quickstart-tech-challenge/projects/1)
+See current open [issues](https://github.com/cmsgov/quickstart-tech-challenge/issues) or check out the [project board](https://github.com/cmsgov/quickstart-tech-challenge/projects/1)
 
 Please feel free to open new issues for defects or enhancements.
 
@@ -95,4 +94,4 @@ work worldwide through the CC0 1.0 Universal public domain dedication.
   [white_homepage]: https://github.com/dwhitecl
   [white_avatar]: https://avatars.githubusercontent.com/dwhitecl?size=150
 
-See [contributor graphs](https://github.com/collabralink-technology/quickstart-tech-challenge/graphs/contributors) for full details.
+See [contributor graphs](https://github.com/cmsgov/quickstart-tech-challenge/graphs/contributors) for full details.

@@ -1,5 +1,6 @@
-Project quickstart-tech-challenge
-=========
+# quickstart-tech-challenge
+
+![Collabralink](https://collabralink.com/wp-content/uploads/logo.png)
 
 Low on time, but in short:  This repo was desinged to get a software project off the ground as quickly as possible; it was initially built as a tech challenge accelerator.
 
@@ -12,8 +13,8 @@ Low on time, but in short:  This repo was desinged to get a software project off
 - The Jenkins system is an ECS master with a slave cluster attached and configured with CasC.  All builds run on ECS slave agents, either EC2 or Fargate.
 
 
-Getting Started
-------------
+## Usage
+
 Building the app locally
 - Clone this repo.  Let's assume you've cloned it to ~/repo
 - cd repo
@@ -39,8 +40,7 @@ Standing up Jenkins to build, deploy, and test your app in Amazon.
 - Configure Jenkins as you wish.  Jenkins is deployed to ECS with data persistence provided by EBS and [rexray](https://github.com/rexray/rexray).
 - Have fun!
 
-Requirements
-------------
+## Requirements
 
 Bash - All workflows are wrapped in .sh scripts.  This is by design, to minimize the amount of tooling needed installed, as some devs can't modify their workstations.
 
@@ -50,21 +50,49 @@ Mac/Linux - Since all workflows are simple shells launching docker containers, i
 
 AWS Account (optional):  You'll need an AWS account with an admin IAM user if you want to build Jenkins in AWS and deploy your application to the cloud.
 
-Dependencies
-------------
+## Dependencies
 
+Your github user must have permissions to read https://github.com/collabralink-technology/terraform-aws-jenkins  
+This is important, as the module is currently private.
+
+## Examples
 None.
 
-Example
-----------------
-None.
+## Contributing / To-Do
 
-License
--------
+See current open [issues](https://github.com/collabralink-technology/quickstart-tech-challenge/issues) or check out the [project board](https://github.com/collabralink-technology/quickstart-tech-challenge/projects/1)
 
-Copyright, Collabralink Technologies Inc.
+Please feel free to open new issues for defects or enhancements.
 
-Author Information
-------------------
+To contribute:
+- Fork this repository
+- Make changes in your fork
+- Open a pull request targetting this repository
 
-This project was created by Mike Dial at Collabralink Technologies, Inc.  mdial@collabralink.com
+Pull requests are being accepted.
+
+## License
+
+[![License](https://img.shields.io/badge/License-CC0--1.0--Universal-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
+
+See [LICENSE](LICENSE.md) for full details.
+
+```text
+As a work of the United States Government, this project is
+in the public domain within the United States.
+
+Additionally, we waive copyright and related rights in the
+work worldwide through the CC0 1.0 Universal public domain dedication.
+```
+
+### Contributors
+
+| [![Mike Dial][dial_avatar]][dial_homepage]<br/>[Mike Dial][dial_homepage] | [![Doug White][white_avatar]][white_homepage]<br/>[Doug White][white_homepage] |
+|---|---|
+
+  [dial_homepage]: https://github.com/mdial89f
+  [dial_avatar]: https://avatars.githubusercontent.com/mdial89f?size=150
+  [white_homepage]: https://github.com/dwhitecl
+  [white_avatar]: https://avatars.githubusercontent.com/dwhitecl?size=150
+
+See [contributor graphs](https://github.com/collabralink-technology/quickstart-tech-challenge/graphs/contributors) for full details.

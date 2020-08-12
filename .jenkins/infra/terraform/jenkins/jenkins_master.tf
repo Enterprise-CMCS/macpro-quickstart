@@ -4,10 +4,7 @@
 #########################################
 
 module "jenkins" {
-  ######################################################################################################
-  # Since this module is not publicly accessible / published, we will have to ship it as a local module.
-  source = "./modules/terraform-aws-jenkins"
-  ######################################################################################################
+  source                         = "git::https://github.com/collabralink-technology/terraform-aws-jenkins.git?ref=2.2.4"
   name                           = var.name
   vpc_id                         = module.vpc_management.vpc_id
   host_instance_type             = var.host_instance_type

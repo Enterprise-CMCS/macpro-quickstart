@@ -13,7 +13,7 @@ Low on time, but in short:  This repo was desinged to get a software project off
 - The Jenkins system is an ECS master with a slave cluster attached and configured with CasC.  All builds run on ECS slave agents, either EC2 or Fargate.
 
 
-## Getting Started
+## Usage
 
 Building the app locally
 - Clone this repo.  Let's assume you've cloned it to ~/repo
@@ -51,11 +51,25 @@ Mac/Linux - Since all workflows are simple shells launching docker containers, i
 AWS Account (optional):  You'll need an AWS account with an admin IAM user if you want to build Jenkins in AWS and deploy your application to the cloud.
 
 ## Dependencies
+
 Your github user must have permissions to read https://github.com/collabralink-technology/terraform-aws-jenkins  
 This is important, as the module is currently private.
 
 ## Examples
 None.
+
+## Contributing / To-Do
+
+See current open [issues](https://github.com/collabralink-technology/quickstart-tech-challenge/issues) or check out the [project board](https://github.com/collabralink-technology/quickstart-tech-challenge/projects/1)
+
+Please feel free to open new issues for defects or enhancements.
+
+To contribute:
+- Fork this repository
+- Make changes in your fork
+- Open a pull request targetting this repository
+
+Pull requests are being accepted.
 
 ## License
 

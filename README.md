@@ -73,10 +73,12 @@ work worldwide through the CC0 1.0 Universal public domain dedication.
 
 ### Contributors
 
-|  [![Mike Dial][dial_avatar]][dial_homepage]<br/>[Mike Dial][dial_homepage] |
-|---|
+| [![Mike Dial][dial_avatar]][dial_homepage]<br/>[Mike Dial][dial_homepage] | [![Doug White][white_avatar]][white_homepage]<br/>[Doug White][white_homepage] |
+|---|---|
 
   [dial_homepage]: https://github.com/mdial89f
   [dial_avatar]: https://avatars.githubusercontent.com/mdial89f?size=150
+  [white_homepage]: https://github.com/dwhitecl
+  [white_avatar]: https://avatars.githubusercontent.com/dwhitecl?size=150
 
 See [contributor graphs](https://github.com/collabralink-technology/quickstart-tech-challenge/graphs/contributors) for full details.
